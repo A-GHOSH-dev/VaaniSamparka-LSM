@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autism MRI Classifier</title>
+    <!-- Bootstrap CSS Link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-FRZyd5zvbz7CO5HN6eu3Eu6Cv6z+htclj/+aNt6A/6pH4ld5D9F4Htbz4f+qV8F8C" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <style>
+        .image-container {
+            text-align: center;
+        }
+        .result {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        /* Additional styles */
+        .container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Autism MRI Classifier</h1>
+        <p class="text-center">Upload an MRI image to classify if it's autistic or not.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form id="image-upload-form" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="image-upload" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Classify</button>
+                </form>
+                <div class="image-container mt-4">
+                    <img id="uploaded-image" src="#" alt="Uploaded MRI Image" style="display: none; max-width: 100%;" class="img-fluid rounded">
+                    <p class="result" id="classification-result"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS and jQuery (for demo purposes) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRp2vvoU5Lhsp38D5z5q5s6u3BokJwBCsw2K0S6W5" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js" integrity="sha384-XNlhbCv8Aq7eZf3z5z5uDuF5n0I8YSLz5P+Ft6f5f5u3Cf5w5e4d5v5U5Y5Y5Y5Y5Y5Y" crossorigin="anonymous"></script>
+
+    <script>
+        // Simulate image classification
+        document.getElementById("image-upload-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("image-upload");
+            const uploadedImage = document.getElementById("uploaded-image");
+            const resultElement = document.getElementById("classification-result");
+
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    uploadedImage.src = reader.result;
+                    uploadedImage.style.display = "block";
+
+                    // Simulate classification (replace with actual model integration)
+                    const isAutistic = Math.random() >= 0.5;
+                    const classificationResult = isAutistic ? "Autistic" : "Not Autistic";
+                    resultElement.textContent = `Classification Result: ${classificationResult}`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

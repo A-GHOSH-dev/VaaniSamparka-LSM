@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Mood Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #recording-controls {
+            margin: 20px;
+        }
+        #result {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Voice Mood Analyzer</h1>
+    <p>Click the button to start recording your voice and analyze its sentiment:</p>
+    
+    <button id="start-recording-button" onclick="startRecording()">Start Recording</button>
+    <button id="stop-recording-button" onclick="stopRecording()" disabled>Stop Recording</button>
+
+    <div id="result"></div>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+
+        async function startRecording() {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) {
+                    audioChunks.push(e.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                // Display the recorded audio player
+                const audioPlayer = new Audio(audioUrl);
+                audioPlayer.controls = true;
+                document.getElementById('result').appendChild(audioPlayer);
+
+                // Perform sentiment analysis (simulated random result)
+                const sentiments = ['Positive', 'Neutral', 'Negative'];
+                const randomSentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
+
+                // Display the sentiment result
+                const resultElement = document.createElement('p');
+                resultElement.textContent = `Sentiment: ${randomSentiment}`;
+                document.getElementById('result').appendChild(resultElement);
+            };
+
+            mediaRecorder.start();
+            document.getElementById('start-recording-button').disabled = true;
+            document.getElementById('stop-recording-button').disabled = false;
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+            document.getElementById('start-recording-button').disabled = false;
+            document.getElementById('stop-recording-button').disabled = true;
+        }
+    </script>
+</body>
+</html>
